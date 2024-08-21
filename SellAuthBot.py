@@ -4,9 +4,12 @@ import requests
 
 TOKEN = 'YOUR TOKEN' # Replace With Your Bot Token
 API_BASE_URL = 'https://api.sellauth.com/v1'
-API_TOKEN = 'https://beta.sellauth.com/user' # Replace With Your SellAuth User
+API_TOKEN = '[your_sellauth_api_token](https://beta.sellauth.com/user)' # Replace With Your SellAuth API Token
 
-bot = commands.Bot(command_prefix='/')
+intents = discord.Intents.default()
+intents.message_content = True  # This allows your bot to read messages
+
+bot = commands.Bot(command_prefix='/', intents=intents)
 
 def call_api(endpoint, method='GET', data=None):
     headers = {'Authorization': f'Bearer {API_TOKEN}'}
@@ -52,8 +55,8 @@ async def edit_product_price(ctx, shop_id, product_id, price):
     r = call_api(f'/shops/{shop_id}/products/{product_id}/update', 'PATCH', {'price': price})
     await ctx.send(f'Updated: {r}')
 
-@bot.command()
-async def help(ctx):
+@bot.command(name="commands_list")
+async def commands_list(ctx):
     await ctx.send("""
     /check_order <order_id> - Check order
     /claim_customer_role <order_id> - Get role
